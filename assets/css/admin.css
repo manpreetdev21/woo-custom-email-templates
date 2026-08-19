@@ -1,0 +1,1035 @@
+/**
+ * WooCommerce Custom Email Templates — admin styles.
+ * A restrained, WordPress-native design: clean cards, soft borders,
+ * an 8px spacing rhythm, minimal shadows, no gradients.
+ */
+
+.wcem-wrap {
+	--wcem-border: #e4e4e7;
+	--wcem-bg: #f6f6f7;
+	--wcem-surface: #ffffff;
+	--wcem-text: #1e1e23;
+	--wcem-muted: #71717a;
+	--wcem-primary: #2563eb;
+	--wcem-primary-dark: #1d4ed8;
+	--wcem-danger: #dc2626;
+	--wcem-success: #16a34a;
+	--wcem-radius: 8px;
+	max-width: 1360px;
+	color: var( --wcem-text );
+}
+
+.wcem-wrap * {
+	box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------------
+ * Header
+ * ------------------------------------------------------------------ */
+
+.wcem-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 24px;
+	margin: 16px 0 24px;
+}
+
+.wcem-header__title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 22px;
+	margin: 0 0 4px;
+}
+
+.wcem-header__title .dashicons {
+	color: var( --wcem-primary );
+}
+
+.wcem-header__desc {
+	color: var( --wcem-muted );
+	margin: 0;
+}
+
+.wcem-header__actions {
+	display: flex;
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------
+ * Alerts / toasts
+ * ------------------------------------------------------------------ */
+
+.wcem-alert {
+	padding: 12px 16px;
+	border-radius: var( --wcem-radius );
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+}
+
+.wcem-alert--success {
+	background: #f0fdf4;
+	border-color: #bbf7d0;
+	color: #166534;
+}
+
+.wcem-alert--error {
+	background: #fef2f2;
+	border-color: #fecaca;
+	color: #991b1b;
+}
+
+.wcem-toasts {
+	position: fixed;
+	right: 24px;
+	bottom: 24px;
+	z-index: 100100;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.wcem-toast {
+	background: var( --wcem-text );
+	color: #fff;
+	padding: 10px 16px;
+	border-radius: var( --wcem-radius );
+	font-size: 13px;
+	box-shadow: 0 4px 16px rgba( 0, 0, 0, 0.15 );
+	opacity: 0;
+	transform: translateY( 8px );
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.wcem-toast.is-visible {
+	opacity: 1;
+	transform: translateY( 0 );
+}
+
+.wcem-toast--error {
+	background: var( --wcem-danger );
+}
+
+.wcem-toast--success {
+	background: #16a34a;
+}
+
+/* ---------------------------------------------------------------------
+ * Stat cards
+ * ------------------------------------------------------------------ */
+
+.wcem-stats {
+	display: grid;
+	grid-template-columns: repeat( 4, 1fr );
+	gap: 16px;
+	margin-bottom: 32px;
+}
+
+.wcem-stat-card {
+	background: var( --wcem-surface );
+	border: 1px solid var( --wcem-border );
+	border-radius: var( --wcem-radius );
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.wcem-stat-card__value {
+	font-size: 28px;
+	font-weight: 600;
+	line-height: 1;
+}
+
+.wcem-stat-card__label {
+	color: var( --wcem-muted );
+	font-size: 13px;
+}
+
+/* ---------------------------------------------------------------------
+ * Section head, cards grid
+ * ------------------------------------------------------------------ */
+
+.wcem-section-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 32px 0 12px;
+}
+
+.wcem-section-head h2 {
+	margin: 0;
+	font-size: 16px;
+}
+
+.wcem-group-title {
+	margin: 28px 0 8px;
+	font-size: 15px;
+}
+
+.wcem-cards {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax( 260px, 1fr ) );
+	gap: 16px;
+}
+
+.wcem-cards--tools {
+	grid-template-columns: repeat( auto-fit, minmax( 320px, 1fr ) );
+	margin-bottom: 32px;
+}
+
+.wcem-card {
+	background: var( --wcem-surface );
+	border: 1px solid var( --wcem-border );
+	border-radius: var( --wcem-radius );
+	padding: 16px;
+}
+
+.wcem-card h2 {
+	margin-top: 0;
+	font-size: 15px;
+}
+
+.wcem-card__head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.wcem-card__desc {
+	color: var( --wcem-muted );
+	font-size: 13px;
+	min-height: 34px;
+}
+
+.wcem-card__foot {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 8px;
+}
+
+/* ---------------------------------------------------------------------
+ * Badges
+ * ------------------------------------------------------------------ */
+
+.wcem-badge {
+	display: inline-block;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	padding: 3px 8px;
+	border-radius: 999px;
+	background: #f4f4f5;
+	color: var( --wcem-muted );
+}
+
+.wcem-badge--publish {
+	background: #f0fdf4;
+	color: #15803d;
+}
+
+.wcem-badge--draft {
+	background: #fefce8;
+	color: #a16207;
+}
+
+.wcem-badge--private,
+.wcem-badge--default {
+	background: #f4f4f5;
+	color: #71717a;
+}
+
+/* ---------------------------------------------------------------------
+ * Empty state
+ * ------------------------------------------------------------------ */
+
+.wcem-empty {
+	text-align: center;
+	padding: 64px 24px;
+	background: var( --wcem-surface );
+	border: 1px dashed var( --wcem-border );
+	border-radius: var( --wcem-radius );
+	margin-bottom: 24px;
+}
+
+.wcem-empty .dashicons {
+	font-size: 40px;
+	width: 40px;
+	height: 40px;
+	color: var( --wcem-primary );
+}
+
+.wcem-empty h2 {
+	margin: 12px 0 4px;
+}
+
+.wcem-empty p {
+	color: var( --wcem-muted );
+	max-width: 420px;
+	margin: 0 auto 20px;
+}
+
+/* ---------------------------------------------------------------------
+ * Table
+ * ------------------------------------------------------------------ */
+
+.wcem-table {
+	border-radius: var( --wcem-radius );
+	overflow: hidden;
+	border-color: var( --wcem-border );
+}
+
+.wcem-muted {
+	color: var( --wcem-muted );
+	font-size: 12px;
+}
+
+.wcem-row-actions button,
+.wcem-row-actions a {
+	margin-right: 10px;
+}
+
+.wcem-row-actions .button-link {
+	color: var( --wcem-danger );
+}
+
+/* ---------------------------------------------------------------------
+ * Toolbar / filters / forms
+ * ------------------------------------------------------------------ */
+
+.wcem-toolbar {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+
+.wcem-form label {
+	display: block;
+	margin-bottom: 4px;
+	font-weight: 600;
+}
+
+.wcem-form .form-table label {
+	font-weight: 400;
+}
+
+/* ---------------------------------------------------------------------
+ * Toggle switch
+ * ------------------------------------------------------------------ */
+
+.wcem-switch {
+	position: relative;
+	display: inline-block;
+	width: 36px;
+	height: 20px;
+}
+
+.wcem-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.wcem-switch span {
+	position: absolute;
+	inset: 0;
+	background: #d4d4d8;
+	border-radius: 999px;
+	transition: background 0.15s ease;
+}
+
+.wcem-switch span::before {
+	content: '';
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	left: 2px;
+	top: 2px;
+	background: #fff;
+	border-radius: 50%;
+	transition: transform 0.15s ease;
+}
+
+.wcem-switch input:checked + span {
+	background: var( --wcem-primary );
+}
+
+.wcem-switch input:checked + span::before {
+	transform: translateX( 16px );
+}
+
+.wcem-switch input:disabled + span {
+	opacity: 0.5;
+}
+
+/* ---------------------------------------------------------------------
+ * Modals (preview / test email / confirm)
+ * ------------------------------------------------------------------ */
+
+.wcem-modal {
+	position: fixed;
+	inset: 0;
+	background: rgba( 0, 0, 0, 0.45 );
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100000;
+	opacity: 0;
+	transition: opacity 0.15s ease;
+}
+
+.wcem-modal.is-visible {
+	opacity: 1;
+}
+
+.wcem-modal[hidden] {
+	display: none;
+}
+
+.wcem-modal__panel {
+	background: var( --wcem-surface );
+	border-radius: var( --wcem-radius );
+	width: 420px;
+	max-width: 92vw;
+	max-height: 88vh;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 12px 40px rgba( 0, 0, 0, 0.2 );
+}
+
+.wcem-modal__panel--wide {
+	width: 800px;
+}
+
+.wcem-modal__panel--small {
+	width: 380px;
+}
+
+.wcem-modal__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 18px;
+	border-bottom: 1px solid var( --wcem-border );
+}
+
+.wcem-modal__close {
+	background: none;
+	border: none;
+	font-size: 20px;
+	cursor: pointer;
+	color: var( --wcem-muted );
+	line-height: 1;
+}
+
+.wcem-modal__body {
+	padding: 18px;
+	overflow: auto;
+}
+
+.wcem-modal__body label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 12px;
+}
+
+.wcem-modal__body input[type="text"],
+.wcem-modal__body input[type="email"] {
+	display: block;
+	width: 100%;
+	margin-top: 4px;
+}
+
+.wcem-modal__foot {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	padding: 14px 18px;
+	border-top: 1px solid var( --wcem-border );
+}
+
+.wcem-button-danger {
+	background: var( --wcem-danger ) !important;
+	border-color: var( --wcem-danger ) !important;
+	color: #fff !important;
+}
+
+#wcem-preview-frame {
+	width: 100%;
+	height: 60vh;
+	border: 1px solid var( --wcem-border );
+	border-radius: 6px;
+	background: #fff;
+	transition: max-width 0.2s ease;
+	margin: 0 auto;
+	display: block;
+}
+
+#wcem-preview-frame.wcem-preview--mobile {
+	max-width: 390px;
+}
+
+/* ---------------------------------------------------------------------
+ * Editor layout
+ * ------------------------------------------------------------------ */
+
+.wcem-wrap--editor {
+	max-width: none;
+}
+
+.wcem-editor {
+	background: var( --wcem-bg );
+	margin: 16px -20px -20px -20px;
+	min-height: calc( 100vh - 116px );
+	display: flex;
+	flex-direction: column;
+}
+
+.wcem-editor__toolbar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 20px;
+	background: var( --wcem-surface );
+	border-bottom: 1px solid var( --wcem-border );
+	flex-wrap: wrap;
+}
+
+.wcem-editor__back {
+	text-decoration: none;
+	color: var( --wcem-muted );
+	flex-shrink: 0;
+}
+
+.wcem-editor__name {
+	font-size: 15px;
+	font-weight: 600;
+	border: 1px solid transparent;
+	background: transparent;
+	padding: 6px 8px;
+	border-radius: 6px;
+	min-width: 200px;
+	flex: 1 1 200px;
+}
+
+.wcem-editor__name:hover,
+.wcem-editor__name:focus {
+	border-color: var( --wcem-border );
+	background: #fff;
+}
+
+.wcem-editor__devices {
+	display: flex;
+	gap: 2px;
+	background: #f4f4f5;
+	border-radius: 6px;
+	padding: 2px;
+}
+
+.wcem-device {
+	border: none;
+	background: transparent;
+	padding: 5px 8px;
+	border-radius: 4px;
+	cursor: pointer;
+	line-height: 1;
+}
+
+.wcem-device.active {
+	background: #fff;
+	box-shadow: 0 1px 2px rgba( 0, 0, 0, 0.08 );
+}
+
+.wcem-editor__actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-left: auto;
+}
+
+.wcem-editor__body {
+	flex: 1;
+	display: grid;
+	grid-template-columns: 240px 1fr 300px;
+	gap: 0;
+	min-height: 0;
+}
+
+.wcem-editor__blocks,
+.wcem-editor__settings {
+	background: var( --wcem-surface );
+	padding: 16px;
+	overflow-y: auto;
+	max-height: calc( 100vh - 160px );
+}
+
+.wcem-editor__blocks {
+	border-right: 1px solid var( --wcem-border );
+}
+
+.wcem-editor__settings {
+	border-left: 1px solid var( --wcem-border );
+}
+
+.wcem-editor__blocks h3,
+.wcem-editor__settings h3 {
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var( --wcem-muted );
+	margin: 0 0 8px;
+}
+
+.wcem-editor__canvas-wrap {
+	padding: 24px;
+	overflow-y: auto;
+	max-height: calc( 100vh - 160px );
+	display: flex;
+	justify-content: center;
+}
+
+.wcem-canvas-frame {
+	width: 100%;
+	max-width: 640px;
+}
+
+.wcem-canvas {
+	background: #fff;
+	border: 1px solid var( --wcem-border );
+	border-radius: var( --wcem-radius );
+	min-height: 200px;
+	padding: 8px;
+}
+
+.wcem-canvas__empty {
+	padding: 60px 20px;
+	text-align: center;
+	color: var( --wcem-muted );
+}
+
+/* Palette */
+
+.wcem-palette {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-bottom: 20px;
+}
+
+.wcem-palette__group-label {
+	font-size: 10px;
+	text-transform: uppercase;
+	color: var( --wcem-muted );
+	margin: 10px 0 2px;
+}
+
+.wcem-palette__group-label:first-child {
+	margin-top: 0;
+}
+
+.wcem-palette__item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	text-align: left;
+	background: #fff;
+	border: 1px solid var( --wcem-border );
+	border-radius: 6px;
+	padding: 7px 10px;
+	cursor: pointer;
+	font-size: 13px;
+}
+
+.wcem-palette__item:hover {
+	border-color: var( --wcem-primary );
+	color: var( --wcem-primary );
+}
+
+/* Tags */
+
+.wcem-tags {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.wcem-tags__group-label {
+	font-size: 10px;
+	text-transform: uppercase;
+	color: var( --wcem-muted );
+	margin: 10px 0 2px;
+}
+
+.wcem-tags__group-label:first-child {
+	margin-top: 0;
+}
+
+.wcem-tags__item {
+	text-align: left;
+	background: transparent;
+	border: none;
+	padding: 4px 6px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 12px;
+	color: var( --wcem-text );
+}
+
+.wcem-tags__item:hover {
+	background: #eff6ff;
+	color: var( --wcem-primary );
+}
+
+/* Canvas blocks */
+
+.wcem-block {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 8px;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.wcem-block:hover {
+	background: #fafafa;
+}
+
+.wcem-block.is-selected {
+	border-color: var( --wcem-primary );
+	background: #eff6ff;
+}
+
+.wcem-block .dashicons:first-of-type {
+	color: var( --wcem-muted );
+}
+
+.wcem-block__handle {
+	cursor: grab;
+	color: #d4d4d8;
+}
+
+.wcem-block__label {
+	font-weight: 600;
+	font-size: 13px;
+	flex-shrink: 0;
+}
+
+.wcem-block__summary {
+	color: var( --wcem-muted );
+	font-size: 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	flex: 1;
+}
+
+.wcem-block__actions {
+	display: flex;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.wcem-block__actions button {
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	color: var( --wcem-muted );
+	padding: 2px;
+}
+
+.wcem-block__actions button:hover {
+	color: var( --wcem-danger );
+}
+
+.ui-sortable-placeholder {
+	border: 1px dashed var( --wcem-primary );
+	visibility: visible !important;
+	background: #eff6ff;
+	border-radius: 6px;
+}
+
+/* Settings tabs + fields */
+
+.wcem-settings-tabs {
+	display: flex;
+	gap: 4px;
+	background: #f4f4f5;
+	border-radius: 6px;
+	padding: 2px;
+	margin-bottom: 16px;
+}
+
+.wcem-settings-tabs button {
+	flex: 1;
+	border: none;
+	background: transparent;
+	padding: 6px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+.wcem-settings-tabs button.active {
+	background: #fff;
+	box-shadow: 0 1px 2px rgba( 0, 0, 0, 0.08 );
+	font-weight: 600;
+}
+
+.wcem-settings-panel {
+	display: none;
+}
+
+.wcem-settings-panel--active {
+	display: block;
+}
+
+.wcem-field {
+	display: block;
+	font-size: 12px;
+	font-weight: 600;
+	margin-bottom: 12px;
+}
+
+.wcem-field input[type="text"],
+.wcem-field input[type="number"],
+.wcem-field textarea,
+.wcem-field select {
+	display: block;
+	width: 100%;
+	margin-top: 4px;
+	font-weight: 400;
+	font-size: 13px;
+}
+
+.wcem-field--checkbox {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-direction: row-reverse;
+	justify-content: flex-end;
+}
+
+.wcem-color-field {
+	display: flex;
+	gap: 6px;
+	margin-top: 4px;
+}
+
+.wcem-color-field input[type="color"] {
+	width: 32px;
+	height: 30px;
+	padding: 2px;
+	flex-shrink: 0;
+}
+
+.wcem-color-field input[type="text"] {
+	flex: 1;
+}
+
+.wcem-media-field {
+	margin-top: 4px;
+}
+
+.wcem-media-field__preview {
+	display: block;
+	max-width: 100%;
+	max-height: 100px;
+	border-radius: 4px;
+	margin-bottom: 6px;
+	border: 1px solid var( --wcem-border );
+}
+
+@media ( max-width: 1200px ) {
+	.wcem-editor__body {
+		grid-template-columns: 1fr;
+	}
+
+	.wcem-editor__blocks,
+	.wcem-editor__settings {
+		max-height: none;
+		border: none;
+		border-top: 1px solid var( --wcem-border );
+	}
+}
+
+@media ( max-width: 782px ) {
+	.wcem-stats {
+		grid-template-columns: repeat( 2, 1fr );
+	}
+}
+
+/* ---------------------------------------------------------------------
+ * Tablet preview
+ * ------------------------------------------------------------------ */
+
+#wcem-preview-frame.wcem-preview--tablet {
+	max-width: 768px;
+}
+
+/* ---------------------------------------------------------------------
+ * Template library
+ * ------------------------------------------------------------------ */
+
+.wcem-cards--library {
+	grid-template-columns: repeat( auto-fill, minmax( 280px, 1fr ) );
+}
+
+.wcem-card--library {
+	display: flex;
+	flex-direction: column;
+	padding-top: 0;
+	overflow: hidden;
+}
+
+.wcem-library-preview {
+	position: relative;
+	height: 200px;
+	margin: 0 -16px 12px;
+	overflow: hidden;
+	background: var( --wcem-bg, #f6f7f7 );
+	border-bottom: 1px solid var( --wcem-border );
+	pointer-events: none;
+}
+
+.wcem-library-preview__frame {
+	width: 250%;
+	height: 250%;
+	border: 0;
+	transform: scale( 0.4 );
+	transform-origin: top left;
+}
+
+/* ---------------------------------------------------------------------
+ * Component-sourced blocks
+ * ------------------------------------------------------------------ */
+
+.wcem-block__origin {
+	color: var( --wcem-muted, #787c82 );
+	font-size: 14px;
+}
+
+.wcem-field__note {
+	display: block;
+	margin-top: 4px;
+	font-size: 12px;
+	color: var( --wcem-muted, #787c82 );
+	font-weight: 400;
+}
+
+/* ---------------------------------------------------------------------
+ * Version history
+ * ------------------------------------------------------------------ */
+
+.wcem-versions {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wcem-versions__item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 10px 0;
+	border-bottom: 1px solid var( --wcem-border );
+}
+
+.wcem-versions__item:last-child {
+	border-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------
+ * Onboarding
+ * ------------------------------------------------------------------ */
+
+.wcem-wrap--onboarding {
+	max-width: 880px;
+}
+
+.wcem-onboarding__step {
+	margin: 0 0 24px;
+	padding: 20px;
+	border: 1px solid var( --wcem-border );
+	border-radius: 8px;
+	background: #fff;
+}
+
+.wcem-onboarding__step legend {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 0 8px;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.wcem-step-number {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: #2271b1;
+	color: #fff;
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.wcem-choice-grid {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax( 240px, 1fr ) );
+	gap: 12px;
+	margin-top: 12px;
+}
+
+.wcem-choice-grid--compact {
+	grid-template-columns: repeat( auto-fill, minmax( 220px, 1fr ) );
+}
+
+.wcem-choice {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	padding: 12px;
+	border: 1px solid var( --wcem-border );
+	border-radius: 6px;
+	cursor: pointer;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wcem-choice:hover,
+.wcem-choice:focus-within {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+}
+
+.wcem-choice__body {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.wcem-choice__body .wcem-muted {
+	font-size: 12px;
+}
+
+.wcem-onboarding__actions {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+@media ( max-width: 782px ) {
+	.wcem-choice-grid {
+		grid-template-columns: 1fr;
+	}
+}
