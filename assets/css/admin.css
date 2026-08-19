@@ -1033,3 +1033,32 @@
 		grid-template-columns: 1fr;
 	}
 }
+
+/* ---------------------------------------------------------------------
+ * Undo / redo
+ * ------------------------------------------------------------------ */
+
+.wcem-editor__history {
+	display: flex;
+	gap: 4px;
+	margin-left: 8px;
+}
+
+.wcem-icon-button {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	padding: 0 !important;
+}
+
+.wcem-icon-button .dashicons {
+	width: 18px;
+	height: 18px;
+	font-size: 18px;
+	line-height: 18px;
+}
+
+.wcem-icon-button:disabled .dashicons {
+	opacity: 0.4;
+}

@@ -20,7 +20,8 @@ Design modern, branded WooCommerce transactional emails with a drag-and-drop bui
 WooCommerce Custom Email Templates lets you replace the look of any WooCommerce email — New Order, Processing, Completed, Customer Invoice and more — with your own drag-and-drop design, while WooCommerce keeps sending the mail exactly as it always has.
 
 - Automatic discovery of every WooCommerce email type, including ones added by other plugins
-- A block-based builder: header, columns, heading, text, image, button, divider, spacer, custom HTML, order details, order totals, customer details, footer
+- A block-based builder with 15 blocks: header, columns, heading, text, image, button, divider, spacer, custom HTML, order details, order totals, customer details, download links, store information, footer
+- Undo and redo, with <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>
 - Reusable components — build a section once, insert it into any template, re-sync them all when it changes
 - Version history for every template, with one-click restore
 - A starter library with live previews: Minimal, Modern Store, Premium, Dark, Compact and Blank
@@ -128,6 +129,9 @@ php tests/integration-ajax.php    # every AJAX endpoint, nonces and caps include
 - Added template version history and restore, built on WordPress post revisions.
 - Added a template library screen with live previews and category filtering.
 - Added a first-run setup wizard.
+- Added undo/redo to the builder, with keyboard shortcuts and a bounded 50-step history.
+- Added a Download Links block for downloadable products. It renders nothing when the order has no downloads, so it is safe to leave in every template.
+- Added a Store Information block that pulls the store's postal address from WooCommerce's own settings, with optional phone and email — transactional mail is widely expected to carry a real postal address.
 - Added a Columns block (2 or 3 email-safe table columns).
 - Added tablet preview, plus sorting and pagination on the templates list.
 - Added integration test suites covering the admin screens and every AJAX endpoint.

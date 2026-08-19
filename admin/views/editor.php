@@ -71,6 +71,14 @@ $wcem_versions = ( 'template' === $wcem_kind && $wcem_id ) ? Versions::all( $wce
 				<button type="button" class="wcem-device" data-device="tablet" aria-pressed="false" title="<?php esc_attr_e( 'Tablet', 'woo-custom-email-templates' ); ?>"><span class="dashicons dashicons-tablet"></span><span class="screen-reader-text"><?php esc_html_e( 'Tablet', 'woo-custom-email-templates' ); ?></span></button>
 				<button type="button" class="wcem-device" data-device="mobile" aria-pressed="false" title="<?php esc_attr_e( 'Mobile', 'woo-custom-email-templates' ); ?>"><span class="dashicons dashicons-smartphone"></span><span class="screen-reader-text"><?php esc_html_e( 'Mobile', 'woo-custom-email-templates' ); ?></span></button>
 			</div>
+			<div class="wcem-editor__history" role="group" aria-label="<?php esc_attr_e( 'Undo and redo', 'woo-custom-email-templates' ); ?>">
+				<button type="button" class="button wcem-icon-button" id="wcem-btn-undo" disabled title="<?php esc_attr_e( 'Undo (Ctrl+Z)', 'woo-custom-email-templates' ); ?>">
+					<span class="dashicons dashicons-undo"></span><span class="screen-reader-text"><?php esc_html_e( 'Undo', 'woo-custom-email-templates' ); ?></span>
+				</button>
+				<button type="button" class="button wcem-icon-button" id="wcem-btn-redo" disabled title="<?php esc_attr_e( 'Redo (Ctrl+Shift+Z)', 'woo-custom-email-templates' ); ?>">
+					<span class="dashicons dashicons-redo"></span><span class="screen-reader-text"><?php esc_html_e( 'Redo', 'woo-custom-email-templates' ); ?></span>
+				</button>
+			</div>
 			<div class="wcem-editor__actions">
 				<button type="button" class="button" id="wcem-btn-preview"><?php esc_html_e( 'Preview', 'woo-custom-email-templates' ); ?></button>
 				<button type="button" class="button" id="wcem-btn-test"><?php esc_html_e( 'Send Test', 'woo-custom-email-templates' ); ?></button>

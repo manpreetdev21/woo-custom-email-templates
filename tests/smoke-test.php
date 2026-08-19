@@ -166,6 +166,45 @@ $columns_html = Blocks::render(
 wcem_check( 'Columns: renders three table cells', 3 === substr_count( $columns_html, '<td width="33%"' ), $columns_html );
 
 /* -------------------------------------------------------------------------
+ * Download links + store info blocks
+ * ---------------------------------------------------------------------- */
+
+$preview_ctx = array( 'order' => null, 'user' => null, 'sample' => true );
+$live_ctx    = array( 'order' => null, 'user' => null );
+
+$dl_preview = Blocks::render( array( 'type' => 'downloads', 'settings' => Blocks::defaults( 'downloads' ) ), TemplateRepository::default_styles(), $preview_ctx );
+wcem_check( 'Downloads: preview shows a sample download link', false !== strpos( $dl_preview, 'Sample Product Guide' ), $dl_preview );
+wcem_check( 'Downloads: preview link is anchored', false !== strpos( $dl_preview, '<a href=' ) );
+
+$dl_live = Blocks::render( array( 'type' => 'downloads', 'settings' => Blocks::defaults( 'downloads' ) ), TemplateRepository::default_styles(), $live_ctx );
+wcem_check( 'Downloads: live send with no order renders nothing', '' === $dl_live, $dl_live );
+
+$store = Blocks::render(
+	array(
+		'type'     => 'store_info',
+		'settings' => array( 'title' => 'Our Store', 'show_address' => 1, 'phone' => '+1 555 0100', 'email' => 'hi@example.test', 'align' => 'center' ),
+	),
+	TemplateRepository::default_styles(),
+	$live_ctx
+);
+wcem_check( 'Store info: renders without needing an order', '' !== $store );
+wcem_check( 'Store info: phone included', false !== strpos( $store, '555 0100' ) );
+wcem_check( 'Store info: email rendered as a mailto link', false !== strpos( $store, 'mailto:hi@example.test' ) );
+wcem_check( 'Store info: title rendered', false !== strpos( $store, 'Our Store' ) );
+
+$store_empty = Blocks::render(
+	array( 'type' => 'store_info', 'settings' => array( 'title' => '', 'show_address' => 0, 'phone' => '', 'email' => '', 'align' => 'left' ) ),
+	TemplateRepository::default_styles(),
+	$live_ctx
+);
+wcem_check( 'Store info: renders nothing when nothing is configured', '' === $store_empty, $store_empty );
+
+$store_xss = Blocks::sanitize_settings( 'store_info', array( 'phone' => '<script>x()</script>555', 'email' => 'a@b.test', 'show_address' => '1', 'title' => '', 'align' => 'nope' ) );
+wcem_check( 'Store info: script stripped from phone', false === strpos( $store_xss['phone'], '<script' ) );
+wcem_check( 'Store info: bad alignment falls back to left', 'left' === $store_xss['align'] );
+wcem_check( 'Store info: checkbox coerced to 1/0', 1 === $store_xss['show_address'] );
+
+/* -------------------------------------------------------------------------
  * Link colouring (the global link_color setting)
  * ---------------------------------------------------------------------- */
 

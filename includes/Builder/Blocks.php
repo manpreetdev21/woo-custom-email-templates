@@ -38,6 +38,8 @@ final class Blocks {
 			'order_details'    => array( \__( 'Order Details', 'woo-custom-email-templates' ), 'dashicons-cart', 'woocommerce' ),
 			'order_totals'     => array( \__( 'Order Totals', 'woo-custom-email-templates' ), 'dashicons-money-alt', 'woocommerce' ),
 			'customer_details' => array( \__( 'Customer Details', 'woo-custom-email-templates' ), 'dashicons-admin-users', 'woocommerce' ),
+			'downloads'        => array( \__( 'Download Links', 'woo-custom-email-templates' ), 'dashicons-download', 'woocommerce' ),
+			'store_info'       => array( \__( 'Store Information', 'woo-custom-email-templates' ), 'dashicons-store', 'woocommerce' ),
 			'footer'           => array( \__( 'Footer', 'woo-custom-email-templates' ), 'dashicons-align-center', 'layout' ),
 		);
 	}
@@ -125,6 +127,18 @@ final class Blocks {
 				'show_billing'  => 1,
 				'show_shipping' => 1,
 			),
+			'downloads'        => array(
+				'title'      => \__( 'Your Downloads', 'woo-custom-email-templates' ),
+				'link_text'  => \__( 'Download', 'woo-custom-email-templates' ),
+				'show_expiry' => 1,
+			),
+			'store_info'       => array(
+				'title'        => '',
+				'show_address' => 1,
+				'phone'        => '',
+				'email'        => '',
+				'align'        => 'center',
+			),
 			'footer'           => array(
 				'text'        => \sprintf( '{site_name} · %s', \__( 'All rights reserved.', 'woo-custom-email-templates' ) ),
 				'show_social' => 0,
@@ -155,7 +169,7 @@ final class Blocks {
 
 		$colors = array( 'color', 'bg_color', 'text_color' );
 		$ints   = array( 'logo_id', 'logo_width', 'media_id', 'width', 'thickness', 'height', 'size', 'gap' );
-		$bools  = array( 'show_name', 'full_width', 'show_sku', 'show_billing', 'show_shipping', 'show_social' );
+		$bools  = array( 'show_name', 'full_width', 'show_sku', 'show_billing', 'show_shipping', 'show_social', 'show_expiry', 'show_address' );
 		$urls   = array( 'url', 'logo_url', 'link', 'facebook', 'instagram', 'twitter', 'linkedin', 'youtube', 'pinterest' );
 		$rich   = array( 'content', 'text', 'col1', 'col2', 'col3' );
 
@@ -646,6 +660,165 @@ final class Blocks {
 			\esc_attr( $styles['text_color'] ),
 			$cols
 		);
+	}
+
+	/**
+	 * Download links for a purchased downloadable product.
+	 *
+	 * WooCommerce only grants these once payment completes, so an order with
+	 * nothing downloadable renders nothing at all rather than an empty
+	 * heading — the same block can then sit in every template safely.
+	 */
+	private static function render_downloads( array $s, array $styles, array $context ): string {
+		$order = $context['order'] ?? null;
+
+		if ( ! $order instanceof WC_Order && ! self::may_show_sample( $context ) ) {
+			return '';
+		}
+
+		$items = array();
+
+		if ( $order instanceof WC_Order ) {
+			foreach ( $order->get_downloadable_items() as $item ) {
+				$items[] = array(
+					'name'    => (string) ( $item['download_name'] ?? $item['product_name'] ?? '' ),
+					'url'     => (string) ( $item['download_url'] ?? '' ),
+					'expires' => $item['access_expires'] ?? null,
+				);
+			}
+		} else {
+			$items[] = array(
+				'name'    => \__( 'Sample Product Guide (PDF)', 'woo-custom-email-templates' ),
+				'url'     => \home_url( '/?download_file=0' ),
+				'expires' => null,
+			);
+		}
+
+		if ( ! $items ) {
+			return ''; // Nothing downloadable on this order.
+		}
+
+		$rows = '';
+
+		foreach ( $items as $item ) {
+			if ( '' === $item['url'] ) {
+				continue;
+			}
+
+			$expiry = '';
+
+			if ( $s['show_expiry'] && $item['expires'] ) {
+				$expiry = \sprintf(
+					'<div style="font-size:12px;color:#71717a;">%s</div>',
+					\esc_html(
+						\sprintf(
+							/* translators: %s: expiry date */
+							\__( 'Expires %s', 'woo-custom-email-templates' ),
+							\function_exists( 'wc_format_datetime' ) ? \wc_format_datetime( $item['expires'] ) : ''
+						)
+					)
+				);
+			}
+
+			$rows .= \sprintf(
+				'<tr><td style="padding:8px 0;border-bottom:1px solid #e4e4e7;">%1$s%2$s</td><td style="padding:8px 0;border-bottom:1px solid #e4e4e7;text-align:right;"><a href="%3$s" target="_blank" rel="noopener" style="color:%4$s;text-decoration:underline;">%5$s</a></td></tr>',
+				\esc_html( $item['name'] ),
+				$expiry,
+				\esc_url( $item['url'] ),
+				\esc_attr( $styles['link_color'] ),
+				\esc_html( $s['link_text'] )
+			);
+		}
+
+		if ( '' === $rows ) {
+			return '';
+		}
+
+		return \sprintf(
+			'<div>%1$s<table role="presentation" width="100%%" style="border-collapse:collapse;margin-top:8px;font-family:%2$s;font-size:%3$dpx;color:%4$s;">%5$s</table></div>',
+			$s['title'] ? \sprintf( '<h3 style="margin:0 0 4px;font-size:16px;color:%s;">%s</h3>', \esc_attr( $styles['heading_color'] ), \esc_html( $s['title'] ) ) : '',
+			\esc_attr( $styles['font_family'] ),
+			(int) $styles['body_size'] - 1,
+			\esc_attr( $styles['text_color'] ),
+			$rows
+		);
+	}
+
+	/**
+	 * The store's postal address and contact details.
+	 *
+	 * Read from WooCommerce's own store settings via get_option() rather than
+	 * WC()->countries, so this renders identically outside a full WooCommerce
+	 * request. Bulk and transactional mail is widely expected to carry a real
+	 * postal address, and until now the only way to include one was to type it
+	 * into a text block by hand.
+	 */
+	private static function render_store_info( array $s, array $styles ): string {
+		$lines = array();
+
+		if ( $s['show_address'] ) {
+			$parts = \array_filter(
+				array(
+					(string) \get_option( 'woocommerce_store_address', '' ),
+					(string) \get_option( 'woocommerce_store_address_2', '' ),
+					\trim( (string) \get_option( 'woocommerce_store_city', '' ) . ' ' . (string) \get_option( 'woocommerce_store_postcode', '' ) ),
+					self::base_country(),
+				),
+				static fn( $part ) => '' !== \trim( (string) $part )
+			);
+
+			if ( $parts ) {
+				$lines[] = \implode( ', ', \array_map( 'esc_html', $parts ) );
+			}
+		}
+
+		if ( ! empty( $s['phone'] ) ) {
+			$lines[] = \esc_html( $s['phone'] );
+		}
+
+		if ( ! empty( $s['email'] ) ) {
+			$lines[] = \sprintf(
+				'<a href="mailto:%1$s" style="color:%2$s;">%1$s</a>',
+				\esc_attr( $s['email'] ),
+				\esc_attr( $styles['link_color'] )
+			);
+		}
+
+		if ( ! $lines ) {
+			return '';
+		}
+
+		return \sprintf(
+			'<div style="text-align:%1$s;font-size:%2$dpx;color:%3$s;">%4$s%5$s</div>',
+			\esc_attr( $s['align'] ),
+			(int) $styles['body_size'] - 2,
+			\esc_attr( $styles['text_color'] ),
+			$s['title'] ? \sprintf( '<h3 style="margin:0 0 4px;font-size:16px;color:%s;">%s</h3>', \esc_attr( $styles['heading_color'] ), \esc_html( $s['title'] ) ) : '',
+			\implode( '<br>', $lines )
+		);
+	}
+
+	/**
+	 * The store's base country name, falling back to the raw code when
+	 * WooCommerce's country list is not loaded.
+	 */
+	private static function base_country(): string {
+		$raw  = (string) \get_option( 'woocommerce_default_country', '' );
+		$code = \explode( ':', $raw )[0];
+
+		if ( '' === $code ) {
+			return '';
+		}
+
+		if ( \function_exists( 'WC' ) && \WC()->countries ) {
+			$names = \WC()->countries->get_countries();
+
+			if ( isset( $names[ $code ] ) ) {
+				return (string) $names[ $code ];
+			}
+		}
+
+		return $code;
 	}
 
 	/**

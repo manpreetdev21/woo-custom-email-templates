@@ -96,6 +96,18 @@
 			{ key: 'show_billing', label: 'Show Billing Address', type: 'checkbox' },
 			{ key: 'show_shipping', label: 'Show Shipping Address', type: 'checkbox' },
 		],
+		downloads: [
+			{ key: 'title', label: 'Title', type: 'text' },
+			{ key: 'link_text', label: 'Link Text', type: 'text' },
+			{ key: 'show_expiry', label: 'Show expiry date', type: 'checkbox', note: 'Renders nothing when the order has no downloadable products, so it is safe to leave in every template.' },
+		],
+		store_info: [
+			{ key: 'title', label: 'Title (optional)', type: 'text' },
+			{ key: 'show_address', label: 'Show store address', type: 'checkbox', note: 'Taken from WooCommerce → Settings → General.' },
+			{ key: 'phone', label: 'Phone', type: 'text' },
+			{ key: 'email', label: 'Email', type: 'text' },
+			{ key: 'align', label: 'Alignment', type: 'select', options: [ 'left', 'center', 'right' ] },
+		],
 		footer: [
 			{ key: 'text', label: 'Footer Text', type: 'textarea' },
 			{ key: 'show_social', label: 'Show Social Icons', type: 'checkbox' },
@@ -139,8 +151,142 @@
 			.replace( /'/g, '&#39;' );
 	}
 
+	/* ---------------------------------------------------------------------
+	 * Undo / redo
+	 *
+	 * Each entry is a JSON snapshot of the whole editable state rather than
+	 * an inverse operation. The state is a few KB, so a bounded stack of
+	 * snapshots costs nothing and removes the need to write — and keep
+	 * correct — an undo for every kind of mutation.
+	 * ------------------------------------------------------------------ */
+
+	var history = { stack: [], index: -1, max: 50 };
+	var historyTimer = null;
+
+	function snapshot() {
+		return JSON.stringify( {
+			blocks: state.blocks,
+			styles: state.styles,
+			name: state.name,
+			description: state.description,
+			subject: state.subject,
+			preview_text: state.preview_text,
+			status: state.status,
+		} );
+	}
+
+	function pushHistory() {
+		var snap = snapshot();
+
+		if ( history.stack[ history.index ] === snap ) {
+			return; // Nothing actually changed.
+		}
+
+		// Any redo branch is discarded once a new edit lands on top of it.
+		history.stack = history.stack.slice( 0, history.index + 1 );
+		history.stack.push( snap );
+
+		if ( history.stack.length > history.max ) {
+			history.stack.shift();
+		}
+
+		history.index = history.stack.length - 1;
+		paintHistoryButtons();
+	}
+
+	// Typing fires markDirty per keystroke; debouncing keeps a typed word as
+	// one undo step instead of one per character.
+	function scheduleHistory() {
+		clearTimeout( historyTimer );
+		historyTimer = setTimeout( pushHistory, 400 );
+	}
+
+	function flushHistory() {
+		clearTimeout( historyTimer );
+		pushHistory();
+	}
+
+	function applySnapshot( snap ) {
+		var s = JSON.parse( snap );
+
+		state.blocks       = s.blocks;
+		state.styles       = s.styles;
+		state.name         = s.name;
+		state.description  = s.description;
+		state.subject      = s.subject;
+		state.preview_text = s.preview_text;
+		state.status       = s.status;
+
+		// Toolbar and Email-tab inputs are plain DOM, so push the restored
+		// values back into them; the two settings panels re-render from state.
+		$( '#wcem-f-name' ).val( state.name );
+		$( '#wcem-f-status' ).val( state.status );
+		$( '#wcem-f-description' ).val( state.description );
+		$( '#wcem-f-subject' ).val( state.subject );
+		$( '#wcem-f-preview-text' ).val( state.preview_text );
+
+		if ( ! findBlock( selectedId ) ) {
+			selectedId = state.blocks.length ? state.blocks[ 0 ].id : null;
+		}
+
+		renderCanvas();
+		renderStylesPanel();
+		renderBlockSettings();
+		paintHistoryButtons();
+	}
+
+	function undo() {
+		flushHistory();
+
+		if ( history.index <= 0 ) {
+			return;
+		}
+
+		history.index--;
+		dirty = true;
+		applySnapshot( history.stack[ history.index ] );
+	}
+
+	function redo() {
+		if ( history.index >= history.stack.length - 1 ) {
+			return;
+		}
+
+		history.index++;
+		dirty = true;
+		applySnapshot( history.stack[ history.index ] );
+	}
+
+	function paintHistoryButtons() {
+		$( '#wcem-btn-undo' ).prop( 'disabled', history.index <= 0 );
+		$( '#wcem-btn-redo' ).prop( 'disabled', history.index >= history.stack.length - 1 );
+	}
+
+	$( document ).on( 'click', '#wcem-btn-undo', undo );
+	$( document ).on( 'click', '#wcem-btn-redo', redo );
+
+	$( document ).on( 'keydown', function ( e ) {
+		if ( ! ( e.ctrlKey || e.metaKey ) || 'z' !== e.key.toLowerCase() ) {
+			return;
+		}
+
+		/*
+		 * Ours always wins, including inside a text field: a snapshot carries
+		 * the field values too, so letting the browser's native text undo run
+		 * here would drift the DOM out of sync with state.
+		 */
+		e.preventDefault();
+
+		if ( e.shiftKey ) {
+			redo();
+		} else {
+			undo();
+		}
+	} );
+
 	function markDirty() {
 		dirty = true;
+		scheduleHistory();
 	}
 
 	function newId() {
@@ -884,4 +1030,8 @@
 	renderCanvas();
 	renderStylesPanel();
 	renderBlockSettings();
+
+	// Seed the history with the state as loaded, so the first undo returns
+	// here rather than to an empty stack.
+	pushHistory();
 } )( jQuery );
